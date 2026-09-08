@@ -13,7 +13,7 @@
    :pool/refused?) are part of the domain layer and pass through here
    unchanged — the boundary does not soften a domain refusal into an
    effect."
-  (:require [clojure.string :as str]))
+  (:require [kotoba.lang.text :as str]))
 
 (def actor-did
   "did:web:kyosai.itonami.cloud")
