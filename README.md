@@ -61,12 +61,35 @@ nbb --classpath src:test run_tests.cljs
 |---|---|
 | `src/kyosai/core.cljc` | **domain 層。** member / schedule / contribution / pool / payout の純粋計算と拒否 |
 | `src/kyosai/murakumo.cljc` | **deny-by-default boundary。** 5 cell × 7 gate の plan 判断 |
+| `kotoba/kyosai/guest/core.kotoba` | **kotoba guest。** 判断層（solidarity / boundary / member gate / non-positive）を amu で check・test・compile される guest として実行 |
 | `test/kyosai/core_test.cljc` | 不変条件を両方向から押す domain test |
 | `test/kyosai/murakumo_test.cljc` | gate の緩み/きつみ両方向の boundary test |
+| `test/kyosai/guest_parity_test.cljc` | guest と cljc oracle の parity。refusal code の対応表が片側だけ動くと赤 |
 | `run_tests.cljs` | runner（nbb + cljs.test）。緑マーカーは全部緑のときだけ出る |
 | `manifest.edn` | actor 宣言（機械可読 SSOT） |
 | `identity.edn` | repo / DID / canonical document の対応 |
 | `repository-contracts.edn` | repo 形状の宣言 |
+
+## kotoba guest
+
+判断層は kotoba guest としても実装されている（`kotoba/kyosai/guest/core.kotoba`）。
+cljc oracle が record 層を持ち、guest が**判断**を実行する —— solidarity・
+boundary inclusive・member gate の各不変条件が、host の解釈ではなく
+コンパイルされた guest の振る舞いとして効く。
+
+```bash
+# check（JVM-free）
+node orgs/kotoba-lang/amu/bin/amu check kotoba/kyosai/guest/core.kotoba --jvm-free
+# guest 自身の test（jvm-kir / js / wasm の 3 target、15 test）
+node orgs/kotoba-lang/amu/bin/amu test kotoba/kyosai/guest/core.kotoba
+# wasm32-browser compile
+node orgs/kotoba-lang/amu/bin/amu compile kotoba/kyosai/guest/core.kotoba \
+  --jvm-free --target wasm32-browser --output target/kyosai-guest-core.wasm
+```
+
+refusal vocabulary は guest header の対応表で i64 code に写像される
+（guest subset は keyword を返さない）。host が code を oracle の refusal map に
+戻す。対応表が guest と parity test の**両方**に書かれており、片側だけ直すと赤になる。
 
 ## 設計の位置づけ
 

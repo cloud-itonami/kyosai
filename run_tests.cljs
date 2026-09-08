@@ -8,7 +8,8 @@
 (ns run-tests
   (:require [clojure.test :as t]
             [kyosai.core-test]
-            [kyosai.murakumo-test]))
+            [kyosai.murakumo-test]
+            [kyosai.guest-parity-test]))
 
 (def green-marker
   "全部緑のときだけ出る —— 出力に現れるかどうかで判定するので、
@@ -22,4 +23,5 @@
         (js/process.exit 1))))
 
 (t/run-tests 'kyosai.core-test
-             'kyosai.murakumo-test)
+             'kyosai.murakumo-test
+             'kyosai.guest-parity-test)

@@ -1,0 +1,79 @@
+(ns kyosai.guest.core (:export [contribution-error-code draft-error-code main test-solidarity-refuses-under-and-over test-boundary-inclusive test-member-gate test-nonpositive test-main]))
+
+;; kyosai.guest.core — 共済 domain decisions as a kotoba guest.
+;;
+;; Oracle: src/kyosai/core.cljc (validate-contribution / draft-payout /
+;; can-pay?). The cljc oracle REMAINS the rich record layer; this guest
+;; carries the DECISIONS only — the refusal codes and the drafted/refused
+;; branch — so the solidarity / non-adjudicating / no-overdraft invariants
+;; are executed by the compiled guest, not only by the host. Parity is
+;; pinned by test/kyosai/guest_parity_test.cljc.
+;;
+;; Refusal vocabulary mapped to i64 codes (the guest subset returns no
+;; keywords; the host maps codes back to the oracle's refusal maps):
+;;   contribution-error-code:
+;;     1 :not-solidarity-amount   (over- AND under-payment — both refused)
+;;     2 :unscheduled-round       (schedule-amount <= 0 means absent)
+;;     3 :non-positive-amount
+;;     0 valid
+;;   draft-error-code:
+;;     1 :insufficient-pool       (boundary INCLUSIVE: amount == balance is ok)
+;;     2 :member-not-active
+;;     3 :non-positive-amount
+;;     0 drafted
+;;
+;; Measured bounds that shaped this port (amu check, 2026-09-08):
+;;   max 5 params per defn — the schedule round -> amount lookup stays in
+;;   the host (the host resolves the round from its own schedule table and
+;;   passes the resolved amount in; the table itself is a host datum, the
+;;   same split as the aiueos manifest faults).
+;;   throw/ex-info forbidden — refusals are returned codes, matching the
+;;   oracle's refusal-map shape (:payout/refused? / :pool/refused?).
+
+(defn contribution-error-code [amount :i64 schedule-amount :i64] :i64
+  (if (> amount 0)
+    (if (> schedule-amount 0)
+      (if (= amount schedule-amount)
+        0
+        1)
+      2)
+    3))
+
+(defn draft-error-code [amount :i64 balance :i64 member-active :i64] :i64
+  (if (> amount 0)
+    (if (= member-active 1)
+      (if (> amount balance)
+        1
+        0)
+      2)
+    3))
+
+(defn main [] :i64 0)
+
+(defn test-solidarity-refuses-under-and-over [] :i64
+  (if (and (= (contribution-error-code 50 100) 1)
+           (= (contribution-error-code 200 100) 1)
+           (= (contribution-error-code 100 100) 0))
+    1
+    0))
+
+(defn test-boundary-inclusive [] :i64
+  (if (and (= (draft-error-code 100 100 1) 0)
+           (= (draft-error-code 101 100 1) 1))
+    1
+    0))
+
+(defn test-member-gate [] :i64
+  (if (and (= (draft-error-code 50 100 0) 2)
+           (= (contribution-error-code 100 0) 2))
+    1
+    0))
+
+(defn test-nonpositive [] :i64
+  (if (and (= (draft-error-code 0 100 1) 3)
+           (= (contribution-error-code 0 100) 3))
+    1
+    0))
+
+(defn test-main [] :i64
+  (if (= (main) 0) 1 0))
