@@ -29,7 +29,7 @@
    Amounts are integers in the smallest currency unit (yen). No network,
    no I/O, no clock. Portable .cljc."
 
-  (:require [clojure.string :as str]))
+  (:require [kotoba.lang.text :as str]))
 
 ;; ---------------------------------------------------------------------------
 ;; Member — opt-in registry
