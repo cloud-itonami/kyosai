@@ -1,0 +1,5 @@
+{:identity/id "did:web:kyosai.itonami.cloud"
+ :identity/actor "kyosai"
+ :identity/repository "https://github.com/cloud-itonami/kyosai"
+ :identity/canonical-document "manifest.edn"
+ :identity/canonical-format :edn}

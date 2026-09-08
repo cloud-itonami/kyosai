@@ -1,0 +1,25 @@
+;; kyosai 共済 — mutual-aid pool actor manifest
+;; Solidarity contributions (equal schedule amounts, NOT risk pricing),
+;; council-ratified payouts out of a derived pool balance. Non-adjudicating:
+;; kyosai drafts; the member council ratifies. The pool cannot go negative
+;; by construction.
+{:actor/id "kyosai"
+ :actor/glyph "共済"
+ :actor/did "did:web:kyosai.itonami.cloud"
+ :actor/role "Mutual-aid (共済) pool actor — solidarity contribution schedule, derived pool balance, payout drafting, council-ratified payout recording. Non-adjudicating (the member council decides); the pool is never an account and never goes negative."
+ :actor/tier "B"
+ :actor/integrates ["insurance" "marine-insurance"]
+ :actor/cells
+ [{:cell/id "collect-contribution"  :cell/kind :langgraph :cell/runtime :wasm}
+  {:cell/id "draft-payout"          :cell/kind :langgraph :cell/runtime :wasm}
+  {:cell/id "record-ratified-payout" :cell/kind :langgraph :cell/runtime :wasm}
+  {:cell/id "pool-status"           :cell/kind :langgraph :cell/runtime :wasm}
+  {:cell/id "health"                :cell/kind :langgraph :cell/runtime :wasm}]
+ :actor/gates
+ {"G1" "solidarity-amount — every active member of a round pays exactly the schedule amount; over- and under-payment are BOTH refused (a discount is risk pricing by another name)"
+  "G2" "non-adjudicating — kyosai drafts payout requests only; ratify-payout throws unconditionally; ratification belongs to the member council"
+  "G3" "council-attestation-required — an already-ratified payout enters the pool only with a truthy :payout/council-attestation"
+  "G4" "no-overdraft — a payout equal to the balance is payable (boundary inclusive); anything more is refused; the pool is never negative by construction"
+  "G5" "no-custody — the pool is a derived balance over recorded contributions and ratified payouts, not an account; no funds move here"
+  "G6" "murakumo-only-inference (no external LLM)"
+  "G7" "no-member-attributes — solidarity pricing requires no member attributes; no field exists that could price a member"}}

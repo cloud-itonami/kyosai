@@ -1,0 +1,25 @@
+#!/usr/bin/env nbb
+;; run_tests.cljs — kyosai (共済) actor の検査。
+;;
+;;   nbb --classpath src:test run_tests.cljs
+;;
+;; runner は sonae / marine-insurance と同じ nbb + cljs.test 構成。
+;; 最後の緑マーカー (`kyosai actor: all green`) は全部緑のときだけ出る。
+(ns run-tests
+  (:require [clojure.test :as t]
+            [kyosai.core-test]
+            [kyosai.murakumo-test]))
+
+(def green-marker
+  "全部緑のときだけ出る —— 出力に現れるかどうかで判定するので、
+   緑でないときに印字してはならない。"
+  "kyosai actor: all green")
+
+(defmethod t/report [:cljs.test/default :end-run-tests] [m]
+  (if (t/successful? m)
+    (println (str "\n" green-marker))
+    (do (println "\nkyosai actor: FAILED")
+        (js/process.exit 1))))
+
+(t/run-tests 'kyosai.core-test
+             'kyosai.murakumo-test)
