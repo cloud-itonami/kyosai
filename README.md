@@ -36,7 +36,7 @@
 ## 確かめる
 
 ```bash
-nbb --classpath src:test run_tests.cljk
+kbb --backend sci --classpath src:test run_tests.cljk
 ```
 
 最後の行が `kyosai actor: all green` なら緑（2026-09-08 実測: 22 test /
