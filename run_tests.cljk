@@ -1,7 +1,7 @@
 #!/usr/bin/env nbb
-;; run_tests.cljs — kyosai (共済) actor の検査。
+;; run_tests.cljk — kyosai (共済) actor の検査。
 ;;
-;;   nbb --classpath src:test run_tests.cljs
+;;   nbb --classpath src:test run_tests.cljk
 ;;
 ;; runner は sonae / marine-insurance と同じ nbb + cljs.test 構成。
 ;; 最後の緑マーカー (`kyosai actor: all green`) は全部緑のときだけ出る。

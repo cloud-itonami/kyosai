@@ -2,12 +2,12 @@
 
 ;; kyosai.guest.core — 共済 domain decisions as a kotoba guest.
 ;;
-;; Oracle: src/kyosai/core.cljc (validate-contribution / draft-payout /
+;; Oracle: src/kyosai/core.cljk (validate-contribution / draft-payout /
 ;; can-pay?). The cljc oracle REMAINS the rich record layer; this guest
 ;; carries the DECISIONS only — the refusal codes and the drafted/refused
 ;; branch — so the solidarity / non-adjudicating / no-overdraft invariants
 ;; are executed by the compiled guest, not only by the host. Parity is
-;; pinned by test/kyosai/guest_parity_test.cljc.
+;; pinned by test/kyosai/guest_parity_test.cljk.
 ;;
 ;; Refusal vocabulary mapped to i64 codes (the guest subset returns no
 ;; keywords; the host maps codes back to the oracle's refusal maps):

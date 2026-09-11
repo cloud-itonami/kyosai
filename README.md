@@ -1,8 +1,8 @@
 # kyosai (共済) — Mutual-Aid Pool Actor: solidarity contributions, council-ratified payouts
 
 **共済 (mutual-aid) actor の domain 層 + deny-by-default boundary。** 共済の掛け金・
-支払いの純粋計算 (`src/kyosai/core.cljc`) と、attestation が揃わなければ effect を
-1 つも出さない gate (`src/kyosai/murakumo.cljc`)。**共済の引受・査定・支払いの実行は、
+支払いの純粋計算 (`src/kyosai/core.cljk`) と、attestation が揃わなければ effect を
+1 つも出さない gate (`src/kyosai/murakumo.cljk`)。**共済の引受・査定・支払いの実行は、
 ここには無い。**
 
 `did:web:kyosai.itonami.cloud`（名乗り。DNS 解決の配信は別作業）
@@ -36,7 +36,7 @@
 ## 確かめる
 
 ```bash
-nbb --classpath src:test run_tests.cljs
+nbb --classpath src:test run_tests.cljk
 ```
 
 最後の行が `kyosai actor: all green` なら緑（2026-09-08 実測: 22 test /
@@ -59,13 +59,13 @@ nbb --classpath src:test run_tests.cljs
 
 | ファイル | 役割 |
 |---|---|
-| `src/kyosai/core.cljc` | **domain 層。** member / schedule / contribution / pool / payout の純粋計算と拒否 |
-| `src/kyosai/murakumo.cljc` | **deny-by-default boundary。** 5 cell × 7 gate の plan 判断 |
+| `src/kyosai/core.cljk` | **domain 層。** member / schedule / contribution / pool / payout の純粋計算と拒否 |
+| `src/kyosai/murakumo.cljk` | **deny-by-default boundary。** 5 cell × 7 gate の plan 判断 |
 | `kotoba/kyosai/guest/core.kotoba` | **kotoba guest。** 判断層（solidarity / boundary / member gate / non-positive）を amu で check・test・compile される guest として実行 |
-| `test/kyosai/core_test.cljc` | 不変条件を両方向から押す domain test |
-| `test/kyosai/murakumo_test.cljc` | gate の緩み/きつみ両方向の boundary test |
-| `test/kyosai/guest_parity_test.cljc` | guest と cljc oracle の parity。refusal code の対応表が片側だけ動くと赤 |
-| `run_tests.cljs` | runner（nbb + cljs.test）。緑マーカーは全部緑のときだけ出る |
+| `test/kyosai/core_test.cljk` | 不変条件を両方向から押す domain test |
+| `test/kyosai/murakumo_test.cljk` | gate の緩み/きつみ両方向の boundary test |
+| `test/kyosai/guest_parity_test.cljk` | guest と cljc oracle の parity。refusal code の対応表が片側だけ動くと赤 |
+| `run_tests.cljk` | runner（nbb + cljs.test）。緑マーカーは全部緑のときだけ出る |
 | `manifest.edn` | actor 宣言（機械可読 SSOT） |
 | `identity.edn` | repo / DID / canonical document の対応 |
 | `repository-contracts.edn` | repo 形状の宣言 |
