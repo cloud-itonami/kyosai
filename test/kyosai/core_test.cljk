@@ -3,7 +3,7 @@
    BOTH directions (the loose direction and the strict direction). A test
    suite that only checks the safe side lets the silent failure class
    through: a gate that softens a domain refusal looks green."
-  (:require [clojure.test :refer [deftest is testing]]
+  (:require [kotoba.test :refer [deftest is testing]]
             [kyosai.core :as core]))
 
 (def schedule

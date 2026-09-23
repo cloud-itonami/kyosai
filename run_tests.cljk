@@ -6,7 +6,7 @@
 ;; runner は sonae / marine-insurance と同じ nbb + cljs.test 構成。
 ;; 最後の緑マーカー (`kyosai actor: all green`) は全部緑のときだけ出る。
 (ns run-tests
-  (:require [clojure.test :as t]
+  (:require [kotoba.test :as t]
             [kyosai.core-test]
             [kyosai.murakumo-test]
             [kyosai.guest-parity-test]))

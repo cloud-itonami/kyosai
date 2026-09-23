@@ -4,7 +4,7 @@
    gate blocks, an explicit false never counts as attested, all four
    attestation shapes are accepted, and blocked plans do not carry
    records."
-  (:require [clojure.test :refer [deftest is testing]]
+  (:require [kotoba.test :refer [deftest is testing]]
             [kyosai.murakumo :as mk]))
 
 (def all-gates (into #{} mk/common-gates))
