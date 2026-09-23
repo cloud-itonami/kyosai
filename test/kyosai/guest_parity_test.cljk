@@ -11,7 +11,7 @@
    The guest's own kotoba test suite (amu test, 3 targets) is run by the
    repo gate; this file pins the SAME cases against the oracle so a
    drift between the two implementations is red here."
-  (:require [clojure.test :refer [deftest is testing]]
+  (:require [kotoba.test :refer [deftest is testing]]
             [kyosai.core :as core]
             #?@(:cljs [["node:fs" :as fs]])))
 
